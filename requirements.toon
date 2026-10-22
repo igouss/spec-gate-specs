@@ -1,0 +1,24 @@
+format: 1
+requirements[7]{id,verification}:
+  sg-212,test
+  sg-397,test
+  sg-3zr,test
+  sg-dop,test
+  sg-i86,test
+  sg-ubq,test
+  sg-zf8,test
+criteria[13]{id,requirement}:
+  sg-212.1,sg-212
+  sg-397.1,sg-397
+  sg-397.2,sg-397
+  sg-397.3,sg-397
+  sg-3zr.1,sg-3zr
+  sg-3zr.2,sg-3zr
+  sg-dop.1,sg-dop
+  sg-dop.2,sg-dop
+  sg-i86.1,sg-i86
+  sg-ubq.1,sg-ubq
+  sg-ubq.2,sg-ubq
+  sg-zf8.1,sg-zf8
+  sg-zf8.2,sg-zf8
+criteria_exempt[0]{id,requirement,reason}:

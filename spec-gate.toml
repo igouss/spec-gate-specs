@@ -1,0 +1,12 @@
+[sut]
+name = "spec-gate"
+repo = "../spec-gate"
+build = "cargo build --release --locked"
+channel = "cli"
+
+[judge]
+release = "v0"
+sha256 = "PENDING"
+
+[gates]
+acceptance = { suite = "crates/acceptance", fail_on_skipped = true }
