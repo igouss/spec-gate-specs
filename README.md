@@ -13,6 +13,7 @@ build, pinned in `spec-gate.toml`, runs these specs against it and passes.
 | `spec-gate.toml` | how to build and judge the product, and which judge build is trusted |
 
 The DSL, driver port, CLI driver and acceptance harness crates are not yet written; their shape
-and the open decisions are in [`../spec-gate/docs/design.md`](../spec-gate/docs/design.md).
+and the decisions D-01 to D-25 are in [`../spec-gate/docs/design.md`](../spec-gate/docs/design.md).
 
-Agents read this repository; they do not write to it.
+Agents draft changes here on a branch named after their bead; only the operator merges to `main`
+([`AGENTS.md`](AGENTS.md)).
