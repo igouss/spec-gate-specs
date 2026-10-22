@@ -1,7 +1,8 @@
 [sut]
 name = "spec-gate"
 repo = "../spec-gate"
-build = "cargo build --release --locked"
+build = ["cargo", "build", "--release", "--locked"]
+artifact = "target/release/spec-gate"
 channel = "cli"
 
 [judge]
@@ -9,4 +10,10 @@ release = "v0"
 sha256 = "PENDING"
 
 [gates]
-acceptance = { suite = "crates/acceptance", fail_on_skipped = true }
+acceptance = { command = ["cargo", "test", "--locked", "--package", "acceptance"], fail_on_skipped = true }
+
+[mint]
+prefix = "sgs"
+
+[scope]
+excluded_criteria = ["sg-212.1", "sg-3zr.1", "sg-3zr.2", "sg-ubq.1", "sg-ubq.2"]
