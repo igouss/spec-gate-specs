@@ -80,7 +80,7 @@ release = "v0"
 sha256 = "PENDING"
 
 [gates]
-acceptance = { command = ["cargo", "test", "--locked", "--package", "acceptance"], fail_on_skipped = true }
+acceptance = { command = ["cargo", "test", "--locked", "--package", "acceptance"] }
 
 [mint]
 prefix = "sgs"
@@ -98,7 +98,6 @@ excluded_criteria = ["sg-212.1", "sg-3zr.1", "sg-3zr.2", "sg-ubq.1", "sg-ubq.2"]
 | `[judge] release` | yes | The pinned judge's release name. The verdict and every ledger entry name it. |
 | `[judge] sha256` | yes | The pinned judge's sha256: 64 hexadecimal digits, compared without regard to case. `PENDING` is the value before a release is pinned; it is not 64 hexadecimal digits, so the judge refuses (C-42). |
 | `[gates] acceptance.command` | yes | The harness command as an argument vector, run without a shell, in the spec checkout root (§4, phase 5). |
-| `[gates] acceptance.fail_on_skipped` | no | Not read by the judge, which treats `skipped` and `undefined` alike (§6.3). See open question Q-2. |
 | `[mint] prefix` | yes | The scenario-id prefix (C-4); a valid `hashid` prefix. This repository uses `sgs`. |
 | `[scope] excluded_criteria` | yes | Criterion ids whose scenarios are not run in v0 (C-1); an array, possibly empty. |
 
@@ -123,8 +122,8 @@ the judgment after phase 3. A void cause in phase 4 or 5 ends it after that phas
 2. **Spec checkout.** Void if `<spec>` is not the root of a git working tree
    (`spec-not-a-repository`); if `refs/heads/main` does not name a commit
    (`spec-main-missing`); if HEAD is not the symbolic ref `refs/heads/main` (C-25,
-   `spec-not-on-main`); or, when S was found, if any tracked file differs from S or any
-   untracked file is not ignored (C-11, `spec-dirty`, naming the paths). No remote is consulted.
+   `spec-not-on-main`); or if any tracked file differs from HEAD or any untracked file is
+   not ignored (C-11, `spec-dirty`, naming the paths). No remote is consulted.
 3. **Spec at S.** Everything except the pin is read from the git objects of the tree at S,
    never from the working tree, which may differ from S when phase 2 recorded a cause.
    - `spec-gate.toml` (§3): void, `config-invalid`, naming the problem.
@@ -364,7 +363,7 @@ Refused:
   "verdict": "refused",
   "product": null,
   "spec": null,
-  "judge": { "release": "v0", "sha256": "0b8f3a1c5d7e9f2a4b6c8d0e1f3a5b7c9d2e4f6a8b0c1d3e5f7a9b2c4d6e8f0a" },
+  "judge": { "release": null, "sha256": "0b8f3a1c5d7e9f2a4b6c8d0e1f3a5b7c9d2e4f6a8b0c1d3e5f7a9b2c4d6e8f0a" },
   "causes": [
     {
       "verdict": "refused", "kind": "pin-mismatch",
@@ -398,7 +397,7 @@ The harness:
   non-zero;
 - writes the results file to `SPEC_GATE_RESULTS` with `cucumber` 0.23's JSON writer (§6.2).
   When `SPEC_GATE_RESULTS` is unset, it writes no results file;
-- runs `cucumber` with `fail_on_skipped`, so an unmatched step is reported `undefined`
+- always runs `cucumber` with `fail_on_skipped`, so an unmatched step is reported `undefined`
   rather than `skipped` (`gate-c7r.6`);
 - never retries a scenario: a retried scenario lists its steps twice, which disagrees with S
   and voids the judgment.
@@ -684,19 +683,9 @@ The driver checks the files, not this output (C-26).
   cannot be read lists every scenario as `not-judged`; a feature file that does not parse
   contributes no scenario. Every other verdict names each excluded scenario, `spec-dirty` and
   `spec-not-on-main` included, because phase 3 reads S whenever phase 2 finds it (§4).
-- **A-5. `[sut] build` is an argument vector**, so both commands run without a shell and quote
-  exactly. On `main` it is a shell string. The operator approved replacing only the `suite` key,
-  so this change to gate config is decided at the operator's merge.
 - **A-6. `[judge] release` is required.** Every ledger entry names it, so a missing value is
   void, `config-invalid`, although C-42 does not list it.
 - **A-7.** A `CARGO_TARGET_DIR` in the judge's environment moves the product artifact away from
   `[sut] artifact`, so the judgment is void, `artifact-missing`.
 - **A-8. The examples are not checked.** No check reads this document's example documents or
   the exit-status table yet; `gate-c7r.13` adds one.
-- **Q-2. `fail_on_skipped`, for the operator** (clarify Q2). The key stays in `[gates]
-  acceptance` byte for byte, and the judge does not read it. It is not inert for the harness:
-  run against the worked example, `cucumber` 0.23 wrote line 13's status as `"undefined"` with
-  `fail_on_skipped` and as `"skipped"` without it. The verdict is the same either way (§6.3).
-  The recommendation is to remove the key and have the harness always set `fail_on_skipped`;
-  removing it is a gate-config change that needs the operator's approval. Until then the
-  harness sets `fail_on_skipped` (§6.1) whatever the key says.

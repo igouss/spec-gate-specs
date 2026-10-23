@@ -10,7 +10,7 @@ release = "v0"
 sha256 = "PENDING"
 
 [gates]
-acceptance = { command = ["cargo", "test", "--locked", "--package", "acceptance"], fail_on_skipped = true }
+acceptance = { command = ["cargo", "test", "--locked", "--package", "acceptance"] }
 
 [mint]
 prefix = "sgs"
