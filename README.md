@@ -11,9 +11,11 @@ build, pinned in `spec-gate.toml`, runs these specs against it and passes.
 | `features/` | Gherkin scenarios; each carries `@covers:<criterion-id>` |
 | `ledger/` | the red-first ledger; entries are written only by the authoritative runner |
 | `spec-gate.toml` | how to build and judge the product, and which judge build is trusted |
+| `contract.md` | the judgment contract: the CLI, `spec-gate.toml`, the harness results, the verdict document and the ledger |
 
 The DSL, driver port, CLI driver and acceptance harness crates are not yet written; their shape
-and the decisions D-01 to D-25 are in [`../spec-gate/docs/design.md`](../spec-gate/docs/design.md).
+and the decisions D-01 to D-25 are in [`../spec-gate/docs/design.md`](../spec-gate/docs/design.md),
+and what they promise the judge is in [`contract.md`](contract.md).
 
 Agents draft changes here on a branch named after their bead; only the operator merges to `main`
 ([`AGENTS.md`](AGENTS.md)).
